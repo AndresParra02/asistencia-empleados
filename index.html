@@ -1,9 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <title>Consulta de Asistencia</title>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <style>
     body { font-family: Arial, sans-serif; margin: 2em; }
     input, button { padding: 8px; font-size: 16px; }
@@ -33,67 +33,38 @@
         <th>Novedad</th>
         <th>Turno</th>
         <th>Entró</th>
-        <th>Salió</th>
+        <th>Saló</th>
       </tr>
     </thead>
     <tbody id="resultados"></tbody>
   </table>
 
   <script>
-    const datos = [
-      {
-        cedula: "123456789",
-        nombre: "Ana Pérez",
-        cargo: "Agente",
-        dia: "Lunes",
-        fecha: "2025-05-20",
-        permiso: "No",
-        novedad: "Ninguna",
-        turno: "Mañana",
-        entro: "08:01",
-        salio: "17:00"
-      },
-      {
-        cedula: "123456789",
-        nombre: "Ana Pérez",
-        cargo: "Agente",
-        dia: "Martes",
-        fecha: "2025-05-21",
-        permiso: "No",
-        novedad: "Ninguna",
-        turno: "Mañana",
-        entro: "08:05",
-        salio: "17:00"
-      },
-      {
-        cedula: "123456789",
-        nombre: "Ana Pérez",
-        cargo: "Agente",
-        dia: "Miércoles",
-        fecha: "2025-05-22",
-        permiso: "Sí",
-        novedad: "Cita médica",
-        turno: "Mañana",
-        entro: "-",
-        salio: "-"
+    let datosCSV = [];
+
+    Papa.parse('asistencia.csv', {
+      download: true,
+      header: true,
+      complete: function(results) {
+        datosCSV = results.data;
       }
-    ];
+    });
 
     function buscarAsistencia() {
       const cedula = document.getElementById('cedula').value.trim();
-      const resultados = datos.filter(d => d.cedula === cedula);
+      const resultados = datosCSV.filter(d => d.Cedula === cedula);
       const tabla = document.getElementById('tablaResultados');
       const cuerpo = document.getElementById('resultados');
       const resumen = document.getElementById('resumen');
       cuerpo.innerHTML = '';
 
       if (resultados.length > 0) {
-        resultados.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
-        
+        resultados.sort((a, b) => new Date(a.Fecha) - new Date(b.Fecha));
+
         let totalDias = resultados.length;
-        let totalPermisos = resultados.filter(r => r.permiso.toLowerCase() === "sí").length;
-        let totalNovedades = resultados.filter(r => r.novedad.toLowerCase() !== "ninguna").length;
-        
+        let totalPermisos = resultados.filter(r => r.Permiso.toLowerCase() === "sí").length;
+        let totalNovedades = resultados.filter(r => r.Novedad.toLowerCase() !== "ninguna").length;
+
         resumen.innerHTML = `
           <strong>Resumen de asistencia:</strong><br>
           Días reportados: <b>${totalDias}</b><br>
@@ -104,16 +75,16 @@
 
         resultados.forEach(d => {
           cuerpo.innerHTML += `<tr>
-            <td>${d.cedula}</td>
-            <td>${d.nombre}</td>
-            <td>${d.cargo}</td>
-            <td>${d.dia}</td>
-            <td>${d.fecha}</td>
-            <td>${d.permiso}</td>
-            <td>${d.novedad}</td>
-            <td>${d.turno}</td>
-            <td>${d.entro}</td>
-            <td>${d.salio}</td>
+            <td>${d.Cedula}</td>
+            <td>${d.Nombre}</td>
+            <td>${d.Cargo}</td>
+            <td>${d.Dia}</td>
+            <td>${d.Fecha}</td>
+            <td>${d.Permiso}</td>
+            <td>${d.Novedad}</td>
+            <td>${d.Turno}</td>
+            <td>${d.Entro}</td>
+            <td>${d.Salio}</td>
           </tr>`;
         });
         tabla.style.display = 'table';
