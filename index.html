@@ -11,7 +11,7 @@
   Papa.parse('asistencia.csv', {
     download: true,
     header: true,
-    delimiter: ";", // ⚠️ punto y coma como separador
+    delimiter: ";", 
     complete: function(results) {
       datosCSV = results.data;
       console.log("CSV cargado:", datosCSV.length, "registros");
@@ -69,8 +69,5 @@
     }
   }
 </script>
-
-
-  
 </body>
 </html>
