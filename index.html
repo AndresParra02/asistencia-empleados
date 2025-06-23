@@ -42,13 +42,15 @@
   <script>
     let datosCSV = [];
 
-    Papa.parse('asistencia.csv', {
-      download: true,
-      header: true,
-      complete: function(results) {
-        datosCSV = results.data;
-      }
-    });
+Papa.parse('asistencia.csv', {
+  download: true,
+  header: true,
+  delimiter: ";", // 👈 esta línea es clave para punto y coma
+  complete: function(results) {
+    datosCSV = results.data;
+    console.log("CSV cargado:", datosCSV.length, "registros");
+  }
+});
 
     function buscarAsistencia() {
       const cedula = document.getElementById('cedula').value.trim();
