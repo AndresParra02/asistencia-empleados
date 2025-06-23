@@ -6,75 +6,15 @@
   <title>Consulta de Asistencia</title>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <style>
-    /* ... tus estilos ... */
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    input, button { padding: 8px; font-size: 16px; }
+    table { border-collapse: collapse; margin-top: 1em; width: 100%; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f0f0f0; }
+    #resumen { margin-top: 2em; padding: 10px; border: 1px solid #ccc; background: #f9f9f9; }
   </style>
 </head>
- <body> 
- 
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-<script>
-  let datosCSV = [];
-
-  Papa.parse('asistencia.csv', {
-    download: true,
-    header: true,
-    delimiter: ";", 
-    complete: function(results) {
-      datosCSV = results.data;
-      console.log("CSV cargado:", datosCSV.length, "registros");
-    }
-  });
-
-  function parseFecha(fechaStr) {
-    // Convierte "18/06/2025" a formato válido: "2025-06-18"
-    const [d, m, y] = fechaStr.split("/");
-    return new Date(`${y}-${m}-${d}`);
-  }
-
-  function buscarAsistencia() {
-    const cedula = document.getElementById('cedula').value.trim();
-    const resultados = datosCSV.filter(d => d.Cedula === cedula);
-    const tabla = document.getElementById('tablaResultados');
-    const cuerpo = document.getElementById('resultados');
-    const resumen = document.getElementById('resumen');
-    cuerpo.innerHTML = '';
-
-    if (resultados.length > 0) {
-      resultados.sort((a, b) => parseFecha(a.Fecha) - parseFecha(b.Fecha));
-
-      let totalDias = resultados.length;
-      let totalPermisos = resultados.filter(r => r.Permiso.toLowerCase() !== "ninguno").length;
-      let totalNovedades = resultados.filter(r => r.Novedad.toLowerCase() !== "sin novedad").length;
-
-      resumen.innerHTML = `
-        <strong>Resumen de asistencia:</strong><br>
-        Días reportados: <b>${totalDias}</b><br>
-        Con permisos: <b>${totalPermisos}</b><br>
-        Con novedades: <b>${totalNovedades}</b>
-      `;
-      resumen.style.display = 'block';
-
-      resultados.forEach(d => {
-        cuerpo.innerHTML += `<tr>
-          <td>${d.Cedula}</td>
-          <td>${d.Nombre}</td>
-          <td>${d.Cargo}</td>
-          <td>${d.Dia}</td>
-          <td>${d.Fecha}</td>
-          <td>${d.Permiso}</td>
-          <td>${d.Novedad}</td>
-          <td>${d.Turno}</td>
-          <td>${d.Entro}</td>
-          <td>${d.Salio}</td>
-        </tr>`;
-      });
-      tabla.style.display = 'table';
-    } else {
-      alert('No se encontraron registros para esa cédula.');
-      tabla.style.display = 'none';
-      resumen.style.display = 'none';
-    }
-  }
-</script>
-</body>
-</html>
+<body>
+  <h1>Consulta tu Asistencia</h1>
+  <label for="cedula">Ingresa tu cédula:</label>
+  <input type="tex
